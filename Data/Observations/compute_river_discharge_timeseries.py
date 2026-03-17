@@ -120,7 +120,7 @@ def subsample_outlets_to_coastal_loctions(X, Y, Depth, outlet_points, distance_t
     return(outlet_points)
 
 def read_ecco_model_runoff(project_folder):
-    grid = np.fromfile(os.path.join(project_folder, 'Model','input', 'runoff-2d-Fekete-coastal.bin'), '>f4').reshape((12,720,960))
+    grid = np.fromfile(os.path.join(project_folder, 'Model','input', 'runoff-2d-Fekete.bin'), '>f4').reshape((12,720,960))
     # convert m/s to mm/day
     # grid *= 86400 * 1000  # Convert from m/s to mm/day
     return(grid)
@@ -130,6 +130,8 @@ def read_daily_runoff_timeseries(project_folder, outlet_ID):
     years = np.arange(1992, 2021, 1).tolist()
 
     runoff_timeseries = np.zeros((len(years), 366))  # Initialize an array to hold the runoff timeseries
+
+    print('Reading data for '+str(outlet_ID))
 
     for year in years:
         file_name = 'AK_Rivers_'+str(outlet_ID)+'.h.'+str(year)+'-01-01-43200.nc'
@@ -144,6 +146,12 @@ def read_daily_runoff_timeseries(project_folder, outlet_ID):
         runoff_timeseries[years.index(year), :len(runoff_timeseries_year)] = runoff_timeseries_year.flatten()
 
     return(runoff_timeseries)
+
+
+
+
+
+    a=1
 
 def write_daily_runoff_to_nc_file(project_folder, daily_runoff_timeseries):
 
@@ -167,7 +175,8 @@ def write_daily_runoff_to_nc_file(project_folder, daily_runoff_timeseries):
 
     ds.close()
 
-project_folder = '/Users/mike/Documents/Research/Projects/Chukchi Sea/'
+# project_folder = '/Users/mhwood/Documents/Research/Projects/Chukchi_Sea'
+project_folder = '/Users/mhwood/Documents/Research/Projects/Chukchi_Sea'
 
 XC, YC, Depth, rA = read_model_grid(project_folder)
 points = reproject_points(np.column_stack((XC.flatten(), YC.flatten())), 4326, 32602)
@@ -188,10 +197,9 @@ outlet_points_close = subsample_outlets_to_coastal_loctions(X, Y, Depth, outlet_
 model_runoff = read_ecco_model_runoff(project_folder)
 for i in range(model_runoff.shape[0]):
     model_runoff[i, :, :] *= rA  # Convert from m/s to m3/s
-model_runoff *= 86400   # Convert from m/s to m/day
 
 outlet_IDs = outlet_points_close[:, 0].astype(int)
-for i in range(2):#len(outlet_IDs)):
+for i in range(len(outlet_IDs)):
     outlet_IDs[i] = int(outlet_IDs[i])
     if i==0:
         daily_runoff_timeseries = read_daily_runoff_timeseries(project_folder, outlet_IDs[i])
@@ -199,23 +207,23 @@ for i in range(2):#len(outlet_IDs)):
         daily_runoff_timeseries += read_daily_runoff_timeseries(project_folder, outlet_IDs[i])
 daily_runoff_climatology = np.mean(daily_runoff_timeseries[:,:365], axis=0)
 
-# # subset to alaska only
-# model_runoff_alaska = model_runoff[:, :, 580:]
-# model_runoff_russia = model_runoff[:, :, :580]
-#
-# model_runoff_alaska_timeseries = np.sum(model_runoff_alaska, axis=(1,2))
-# model_runoff_russia_timeseries = np.sum(model_runoff_russia, axis=(1,2))
-# model_runoff_timeseries = np.sum(model_runoff, axis=(1,2))
-#
-# plt.subplot(2,1,1)
-# plt.plot(model_runoff_alaska_timeseries, label='Model Runoff Alaska')
-# plt.plot(model_runoff_russia_timeseries, label='Model Runoff Russia')
-# plt.plot(model_runoff_timeseries, label='Total Model Runoff')
-# plt.legend()
-#
-# plt.subplot(2,1,2)
-# plt.plot(daily_runoff_climatology, label='Runoff Climatology from Observations')
-# plt.show()
+# subset to alaska only
+model_runoff_alaska = model_runoff[:, :, 580:]
+model_runoff_russia = model_runoff[:, :, :580]
+
+model_runoff_alaska_timeseries = np.sum(model_runoff_alaska, axis=(1,2))
+model_runoff_russia_timeseries = np.sum(model_runoff_russia, axis=(1,2))
+model_runoff_timeseries = np.sum(model_runoff, axis=(1,2))
+
+plt.subplot(2,1,1)
+plt.plot(model_runoff_alaska_timeseries, label='Model Runoff Alaska')
+plt.plot(model_runoff_russia_timeseries, label='Model Runoff Russia')
+plt.plot(model_runoff_timeseries, label='Total Model Runoff')
+plt.legend()
+
+plt.subplot(2,1,2)
+plt.plot(daily_runoff_climatology, label='Runoff Climatology from Observations')
+plt.show()
 
 write_daily_runoff_to_nc_file(project_folder, daily_runoff_timeseries)
 
