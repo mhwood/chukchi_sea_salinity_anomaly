@@ -1,0 +1,73 @@
+# Open-boundaries
+ &OBCS_PARM01
+#
+ OBCSfixTopo=.FALSE.,
+#
+ OB_Jnorth= 960*-1,
+ OB_Jsouth= 960*1,
+ OB_Ieast = 720*-1,
+ OB_Iwest = 720*1,
+#
+ useOBCSsponge = .TRUE.,
+#
+ useOBCSbalance = .TRUE.,
+ OBCSbalanceSurf = .TRUE.,
+#
+ useOBCSprescribe = .TRUE.,
+#
+ OBEuFile = 'obcs/L1_BC_east_UVEL',
+ OBNuFile = 'obcs/L1_BC_north_UVEL',
+ OBSuFile = 'obcs/L1_BC_south_UVEL',
+ OBWuFile = 'obcs/L1_BC_west_UVEL',
+#
+ OBEvFile = 'obcs/L1_BC_east_VVEL',
+ OBNvFile = 'obcs/L1_BC_north_VVEL',
+ OBSvFile = 'obcs/L1_BC_south_VVEL',
+ OBWvFile = 'obcs/L1_BC_west_VVEL',
+#
+ OBEtFile = 'obcs/L1_BC_east_THETA',
+ OBNtFile = 'obcs/L1_BC_north_THETA',
+ OBStFile = 'obcs/L1_BC_south_THETA',
+ OBWtFile = 'obcs/L1_BC_west_THETA',
+#
+ OBEsFile = 'obcs/L1_BC_east_SALT',
+ OBNsFile = 'obcs/L1_BC_north_SALT',
+ OBSsFile = 'obcs/L1_BC_south_SALT',
+ OBWsFile = 'obcs/L1_BC_west_SALT',
+#
+ OBEaFile = 'obcs/L1_BC_east_AREA',
+ OBNaFile = 'obcs/L1_BC_north_AREA',
+ OBSaFile = 'obcs/L1_BC_south_AREA',
+ OBWaFile = 'obcs/L1_BC_west_AREA',
+#
+ OBEsnFile = 'obcs/L1_BC_east_HSNOW',
+ OBNsnFile = 'obcs/L1_BC_north_HSNOW',
+ OBSsnFile = 'obcs/L1_BC_south_HSNOW',
+ OBWsnFile = 'obcs/L1_BC_west_HSNOW',
+#
+ OBEhFile = 'obcs/L1_BC_east_HEFF',
+ OBNhFile = 'obcs/L1_BC_north_HEFF',
+ OBShFile = 'obcs/L1_BC_south_HEFF',
+ OBWhFile = 'obcs/L1_BC_west_HEFF',
+#
+ OBEuiceFile = 'obcs/L1_BC_east_UICE',
+ OBNuiceFile = 'obcs/L1_BC_north_UICE',
+ OBSuiceFile = 'obcs/L1_BC_south_UICE',
+ OBWuiceFile = 'obcs/L1_BC_west_UICE',
+#
+ OBEviceFile = 'obcs/L1_BC_east_VICE',
+ OBNviceFile = 'obcs/L1_BC_north_VICE',
+ OBSviceFile = 'obcs/L1_BC_south_VICE',
+ OBWviceFile = 'obcs/L1_BC_west_VICE',
+ &
+
+ &OBCS_PARM02
+ &
+
+ &OBCS_PARM03
+ spongeThickness = 10,
+ Urelaxobcsinner = 1296000.E0,
+ Vrelaxobcsinner = 1296000.E0,
+ Urelaxobcsbound=43200.E0,
+ Vrelaxobcsbound=43200.E0,
+ &

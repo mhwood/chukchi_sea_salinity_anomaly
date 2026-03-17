@@ -1,0 +1,79 @@
+#--------------------------------------------------------------------------------
+# Diagnostics_vec Package Choices
+#--------------------------------------------------------------------------------
+#     Averaging Period:
+#     nml_startTime : start time of output
+#     nml_endTime : end time of output
+#
+#     Mask Files:
+#     nml_boundaryFiles : filenames of lateral boundary mask
+#     nml_surfaceFiles : filenames of surface boundary mask
+#
+#     2D Boundary Extraction Fields
+#     nml_fields2D : field names for 2D ocean state/flux variables for each open
+#                    boundary (e.g. ETAN)
+#
+#     3D Boundary Extraction Fields
+#     nml_fields3D : field names for 3D ocean state/flux variables for each open
+#                    boundary (e.g. THETA)
+#                       usage: nml_fields3D(1:2,3) = 'THETA   ','SALT   ',
+#                              - first field is for variables, 
+#                              - second is for the mask number
+#     nml_levels3D : depths of 3D fields for each open boundary
+#                    (starting from surface)
+#
+#     Surface Boundary Extraction Fields
+#     nml_fieldsSurf : field names for surface ocean state/flux variables for
+#                      each open boundary (e.g. XXXXXX)
+#
+#     Output Options:
+#     nml_filePrec : output file real precision (32 or 64 bits)
+#--------------------------------------------------------------------------------
+
+ &DIAG_VEC_INPUT_VARS
+#
+ nml_startTime = 0,
+ nml_endTime = 3153600000.,
+#
+# lateral BC's are averaged hourly and dumped monthly
+#
+ nml_vecFiles(1) = 'dv/CTD_mask.bin',
+ nml_vecFiles(2) = 'dv/Kanger_Trough_mask.bin',
+ nml_vecFiles(3) = 'dv/Chris_Trough_mask.bin',
+#
+# lateral bc's have 180 iterations per file (24*30)
+#
+ nml_vec_iters_per_file(1:3) = 180, 180, 180
+#
+# lateral bc's have an averaging period of 60 min (60*60)
+#
+ nml_vec_avg_periods(1:3) = 86400., 86400., 86400.,
+#
+ nml_fields2D(1:6,1) = 'ETAN    ','UICE    ','VICE    ','AREA    ','HEFF    ','HSNOW   ',
+ nml_fields2D(1:6,2) = 'ETAN    ','UICE    ','VICE    ','AREA    ','HEFF    ','HSNOW   ',
+ nml_fields2D(1:6,3) = 'ETAN    ','UICE    ','VICE    ','AREA    ','HEFF    ','HSNOW   ',
+#
+ nml_fields3D(1:4,1) = 'THETA   ','SALT   ','VVEL   ','UVEL    ',
+ nml_levels3D(1:4,1) =   51, 51, 51, 51,
+ nml_fields3D(1:4,2) = 'THETA   ','SALT   ','VVEL   ','UVEL    ',
+ nml_levels3D(1:4,2) =   51, 51, 51, 51,
+ nml_fields3D(1:4,3) = 'THETA   ','SALT   ','VVEL   ','UVEL    ',
+ nml_levels3D(1:4,3) =   51, 51, 51, 51,
+#
+# surface bc's are averaged every hour and dumped every month
+#
+# nml_sfFiles(1) = 'dv/shelfice_mask.bin',
+#
+# surface bc's have 180 iterations per file (30*6)
+#
+# nml_sf_iters_per_file(1) = 180,
+#
+# surface bc's have an averaging period of 1 day (24*60*60)
+#
+# nml_sf_avg_periods(1) = 86400.,
+#
+# nml_fieldsSF(1:2,1) = 'SHFHTFLX','SHFFWFLX',
+#
+ nml_filePrec = 32,
+ &
+ 
